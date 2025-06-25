@@ -2,9 +2,9 @@
 
 An interactive color-matching game built in C, rendered via WebAssembly, and playable directly in the browser. The player adjusts RGB sliders to match a target circle color.
 
-![Game Screenshot](./screenshot.png)
+![Screenshot from 2025-06-25 14-42-04](https://github.com/user-attachments/assets/876582ea-13a9-48d6-a841-0010a178d07e)
 
-### 🌐 [Play Now](https://yourusername.github.io/color-game/demo.html)
+### 🌐 [Play Now](https://42-course.github.io/dino_game/demo.html)
 
 ---
 
@@ -49,7 +49,7 @@ Use this `<iframe>` to embed the game anywhere:
 
 ```html
 <iframe 
-  src="https://yourusername.github.io/color-game/embed.html"
+  src="https://42-course.github.io/dino_game/embed.html"
   width="800" 
   height="600" 
   style="border: none; border-radius: 10px; box-shadow: 0 0 20px rgba(0,255,180,0.3);"
