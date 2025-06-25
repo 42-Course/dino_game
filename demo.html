@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Color Game</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #a86dd4, #2d9cfa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      overflow: hidden;
+    }
+
+    #canvas {
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.4), 0 0 10px lime;
+      outline: none;
+      border: 3px solid #000;
+      background-color: #111;
+    }
+
+    #status {
+      position: absolute;
+      bottom: 16px;
+      font-size: 14px;
+      color: white;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    #spinner {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 24px;
+      height: 24px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top: 4px solid lime;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" class="emscripten" tabindex="-1"></canvas>
+  <div id="status">Loading...</div>
+  <div id="spinner"></div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const status = document.getElementById("status");
+    const spinner = document.getElementById("spinner");
+
+    canvas.addEventListener("webglcontextlost", function (e) {
+      alert("WebGL context lost. Reload the page.");
+      e.preventDefault();
+    });
+
+    var Module = {
+      canvas: canvas,
+      setStatus: function(text) {
+        if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: "" };
+        if (text !== Module.setStatus.last.text) {
+          const now = Date.now();
+          if (now - Module.setStatus.last.time < 30) return;
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          status.textContent = text;
+          if (text === "" || text === "All downloads complete.") {
+            spinner.style.display = "none";
+          }
+        }
+      },
+      monitorRunDependencies: function(left) {
+        Module.totalDependencies = Math.max(Module.totalDependencies || 0, left);
+        Module.setStatus(left
+          ? "Preparing... (" + (Module.totalDependencies - left) + "/" + Module.totalDependencies + ")"
+          : "All downloads complete.");
+      }
+    };
+
+    Module.setStatus("Downloading...");
+    window.onerror = function(message) {
+      Module.setStatus("Exception thrown, check console");
+      spinner.style.display = "none";
+    };
+  </script>
+  <script async src="demo.js"></script>
+</body>
+</html>
